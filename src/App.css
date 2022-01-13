@@ -1,14 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap');
+
 /* Customize your main colors in :root variables */
 :root {
-  --main-background-color: #343A50;
-  --card-background-color: #51576D;
+  --main-background-color: #FFFFFF;
+  --card-background-color: #F9F2ED;
   --card-background-lighter-color: #7A7F92;
-  --main-text-color:#F7F6F4;
-  --title-text-color:#3CBA8B;
+  --main-text-color:#333333;
+  --title-text-color:#C89A78;
+  --menu-text-color:#333333;
 }
 
 body{
   background-color:var(--main-background-color);
+  font-family: 'Source Sans Pro', sans-serif;
 }
 
 h2, p{
