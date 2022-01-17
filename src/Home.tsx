@@ -8,8 +8,6 @@ import { WalletMultiButton } from "@solana/wallet-adapter-material-ui";
 import { GatewayProvider } from "@civic/solana-gateway-react";
 import Countdown from "react-countdown";
 import { Snackbar, Paper, LinearProgress, Chip } from "@material-ui/core";
-import ImageList from "@material-ui/core/ImageList";
-import ImageListItem from "@material-ui/core/ImageListItem";
 import Alert from "@material-ui/lab/Alert";
 import { toDate, AlertState, getAtaForMint } from "./utils";
 import { MintButton } from "./MintButton";
@@ -18,6 +16,11 @@ import CustomizedTimeline from "./Timeline";
 import CustomizedAccordions from "./FAQView";
 import Button from "@material-ui/core/Button";
 import { SocialIcon } from "react-social-icons";
+import {
+  ScrollingProvider,
+  useScrollSection,
+  Section,
+} from 'react-scroll-section';
 import {
   CandyMachine,
   awaitTransactionSignatureConfirmation,
@@ -140,30 +143,25 @@ const NavContainer = styled.div`
   margin-right: auto;
 
   li {
+    cursor: pointer;
     margin: 0 20px;
+    color: var(--menu-text-color);
+    list-style-image: none;
+    list-style-position: outside;
+    list-style-type: none;
+    outline: none;
+    text-decoration: none;
+    text-size-adjust: 100%;
+    touch-action: manipulation;
+    transition: color 0.3s;
+    padding-bottom: 15px;
+  }
 
-    a {
-      color: var(--menu-text-color);
-      list-style-image: none;
-      list-style-position: outside;
-      list-style-type: none;
-      outline: none;
-      text-decoration: none;
-      text-size-adjust: 100%;
-      touch-action: manipulation;
-      transition: color 0.3s;
-      padding-bottom: 15px;
-
-      img {
-        max-height: 26px;
-      }
-    }
-
-    a:hover,
-    a:active {
-      color: rgb(200, 154, 120);
-      border-bottom: 4px solid var(--title-text-color);
-    }
+  li:hover,
+  li:active {
+    color: rgb(200, 154, 120);
+    padding-bottom: 11px;
+    border-bottom: 4px solid var(--title-text-color);
   }
 `;
 
@@ -336,6 +334,32 @@ const LogoAligner = styled.div`
     margin-right: 12px;
   }
 `;
+
+const StaticMenu = () => {
+  const mintSection = useScrollSection('mint');
+  const gallerySection = useScrollSection('gallery');
+  const roadmapSection = useScrollSection('roadmap');
+  const faqSection = useScrollSection('faq');
+
+  return (
+    <NavContainer>
+      <Menu>
+        <li onClick={mintSection.onClick}>
+          Mint
+        </li>
+        <li onClick={gallerySection.onClick}>
+          Gallery
+        </li>
+        <li onClick={roadmapSection.onClick}>
+          Roadmap
+        </li>
+        <li onClick={faqSection.onClick}>
+          FAQ
+        </li>
+      </Menu>
+    </NavContainer>
+  );
+};
 
 export interface HomeProps {
   candyMachineId: anchor.web3.PublicKey;
@@ -570,7 +594,7 @@ const Home = (props: HomeProps) => {
   ]);
 
   return (
-    <main>
+    <main><ScrollingProvider>
       <MainContainer>
         <WalletContainer>
           <Logo>
@@ -647,31 +671,9 @@ const Home = (props: HomeProps) => {
           </h4>
         </BannerContainer>
 
-        <NavContainer>
-          <Menu>
-            <li>
-              <a href="#" target="_blank" rel="noopener noreferrer">
-                Mint
-              </a>
-            </li>
-            <li>
-              <a href="#" target="_blank" rel="noopener noreferrer">
-                Gallery
-              </a>
-            </li>
-            <li>
-              <a href="#" target="_blank" rel="noopener noreferrer">
-                Roadmap
-              </a>
-            </li>
-            <li>
-              <a href="#" target="_blank" rel="noopener noreferrer">
-                FAQ
-              </a>
-            </li>
-          </Menu>
-        </NavContainer>
+        <StaticMenu/>
 
+        <Section id="mint">
         <MintContainer>
           <DesContainer>
             <NFT1>
@@ -770,24 +772,31 @@ const Home = (props: HomeProps) => {
             </NFT2>
           </DesContainer>
         </MintContainer>
+        </Section>
 
-        <SectionTitle>Gallery</SectionTitle>
-        <SectionSubtitle>The finest NFT that your could mint</SectionSubtitle>
-        <MintContainer>
-            <BasicImageList/>
-        </MintContainer>
+        <Section id="gallery">
+          <SectionTitle>Gallery</SectionTitle>
+          <SectionSubtitle>The finest NFT that your could mint</SectionSubtitle>
+          <MintContainer>
+              <BasicImageList/>
+          </MintContainer>
+        </Section>
 
-        <SectionTitle>Roadmap</SectionTitle>
-        <SectionSubtitle>Here is our vision to this NFT collection</SectionSubtitle>
-        <MintContainer>
-          <CustomizedTimeline/>
-        </MintContainer>
+        <Section id="roadmap">
+          <SectionTitle>Roadmap</SectionTitle>
+          <SectionSubtitle>Here is our vision to this NFT collection</SectionSubtitle>
+          <MintContainer>
+            <CustomizedTimeline/>
+          </MintContainer>
+        </Section>
 
-        <SectionTitle>Frequently Asked Questions</SectionTitle>
-        <SectionSubtitle>Here is our vision to this NFT collection</SectionSubtitle>
-        <MintContainer>
-            <CustomizedAccordions/>
-        </MintContainer>
+        <Section id="faq">
+          <SectionTitle>Frequently Asked Questions</SectionTitle>
+          <SectionSubtitle>Here is our vision to this NFT collection</SectionSubtitle>
+          <MintContainer>
+              <CustomizedAccordions/>
+          </MintContainer>
+        </Section>
 
       </MainContainer>
       <Snackbar
@@ -802,7 +811,7 @@ const Home = (props: HomeProps) => {
           {alertState.message}
         </Alert>
       </Snackbar>
-    </main>
+    </ScrollingProvider></main>
   );
 };
 
